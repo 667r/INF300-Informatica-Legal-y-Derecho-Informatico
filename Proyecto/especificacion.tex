@@ -1,0 +1,84 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage[utf8]{inputenc} % Para soportar caracteres en español
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Plataforma SaaS para la Autoevaluación y Gestión de Cumplimiento de la Ley Marco de Ciberseguridad en Chile}
+
+\author{\IEEEauthorblockN{Mariano Varas Ramos}
+\IEEEauthorblockA{\textit{Departamento de Informática} \\
+\textit{Universidad Técnica Federico Santa María}\\
+Santiago, Chile \\
+mariano.varas@usm.cl}
+\and
+\IEEEauthorblockN{Matías Elgueta Chavarria}
+\IEEEauthorblockA{\textit{Departamento de Informática} \\
+\textit{Universidad Técnica Federico Santa María}\\
+Santiago, Chile \\
+matias.elgueta@usm.cl}
+}
+
+\maketitle
+
+\begin{abstract}
+Este documento presenta la especificación de un proyecto informático enfocado en el ámbito de la informática legal. Se propone el desarrollo de una plataforma SaaS (Software as a Service) de autoevaluación y gestión de cumplimiento, diseñada para asistir a las entidades designadas como "Operadores de Importancia Vital" (OIV) en Chile a diagnosticar y gestionar su conformidad con la nueva Ley Marco de Ciberseguridad. La solución busca cerrar la brecha entre las exigencias normativas abstractas y su implementación técnica y organizacional concreta, proveyendo una herramienta de diagnóstico, reporte y mejora continua.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Informática Legal, Legal Tech, Ciberseguridad, Cumplimiento Normativo, SaaS, Ley Marco de Ciberseguridad, Chile
+\end{IEEEkeywords}
+
+\section{Problemática}
+La implementación de la Ley Marco de Ciberseguridad en Chile ha impuesto un nuevo y complejo conjunto de obligaciones a entidades públicas y privadas que son designadas como "Operadores de Importancia Vital" (OIV). Estas organizaciones, críticas para el funcionamiento del país, deben implementar robustos sistemas de gobernanza, gestión de riesgos y notificación de incidentes. La problemática central es la ausencia de herramientas accesibles que permitan a estas entidades traducir los requisitos legales en controles técnicos y organizacionales verificables. Existe una brecha significativa entre el texto de la ley y la capacidad práctica de las organizaciones para evaluar su nivel de cumplimiento, identificar sus debilidades y planificar mejoras, lo que crea un alto riesgo de incumplimiento y exposición a ciberataques.
+
+Este proyecto es de alta pertinencia para el curso, ya que aborda directamente la interacción entre las "reglas" (la ley) y las "herramientas" (el software), un concepto central de la informática legal. La plataforma actúa como un "modelo de dirección viable", utilizando la tecnología para guiar a las organizaciones hacia el cumplimiento.
+
+\section{Solución Propuesta}
+Se propone el desarrollo de una \textbf{plataforma SaaS (Software as a Service) de autoevaluación guiada y gestión de cumplimiento}. Esta herramienta estará diseñada específicamente para guiar a los OIV a través de las obligaciones de la Ley Marco de Ciberseguridad, permitiéndoles diagnosticar su estado de madurez, identificar brechas de cumplimiento y generar planes de acción para la remediación.
+
+\section{Funcionalidades}
+El producto mínimo viable se centrará en tres funcionalidades clave, presentadas en orden de importancia.
+
+\subsection{Módulo de Autoevaluación Guiada y Diagnóstico de Brechas}
+Esta es la funcionalidad principal. Consiste en un módulo que traduce cada obligación de la ley en un cuestionario interactivo y detallado. Los usuarios pueden responder a cada control y adjuntar evidencia documental. Basado en las respuestas, el sistema realiza un análisis de brechas (Gap Analysis) automático, identificando con precisión los requisitos no cumplidos y su criticidad. Su valor radica en ofrecer un diagnóstico rápido y objetivo que reemplaza las costosas auditorías manuales iniciales. Un CISO\footnote{El Chief Information Security Officer es el director de seguridad de la información, un alto ejecutivo responsable de supervisar la seguridad de la información y la ciberseguridad de una organización.} de una empresa eléctrica, por ejemplo, podría usarlo para descubrir que su política de seguridad no ha sido formalmente aprobada por el directorio, generando una alerta de incumplimiento.
+
+\subsection{Dashboard Interactivo y Generación de Reportes Ejecutivos}
+Esta funcionalidad presenta los resultados de la autoevaluación en un dashboard visual, con un puntaje de cumplimiento general y gráficos por dominio. Permite la generación de reportes ejecutivos en PDF con un solo clic, resumiendo los hallazgos para la alta gerencia. Su valor es facilitar la comunicación del estado de cumplimiento a los tomadores de decisiones no técnicos, convirtiendo datos complejos en información estratégica para la asignación de recursos.
+
+\subsection{Plan de Acción Sugerido y Biblioteca de Recursos}
+Por cada brecha identificada, la plataforma no solo diagnostica, sino que prescribe. Genera una "Hoja de Ruta" con tareas priorizadas para la remediación y ofrece una biblioteca de recursos con plantillas de documentos (políticas, planes de respuesta) y guías de buenas prácticas. Su valor es acelerar el proceso de mejora, proveyendo herramientas prácticas que reducen la incertidumbre y transforman la plataforma en una herramienta de gestión activa.
+
+\section{Requerimientos no Funcionales}
+\begin{itemize}
+    \item \textbf{Recursos Técnicos:} El backend se desarrollará en Python con el framework Django, el frontend como una Single Page Application con React o Vue.js, y se utilizará PostgreSQL como base de datos.
+    \item \textbf{Arquitectura Multi-tenant:} La plataforma debe garantizar el aislamiento total de los datos entre los diferentes clientes (tenants).
+    \item \textbf{Seguridad y Confidencialidad:} Se implementará cifrado de datos en tránsito y en reposo. Se garantizará que los datos de los clientes residan en servidores ubicados en Chile.
+    \item \textbf{Escalabilidad y Mantenibilidad:} La arquitectura debe ser escalable para soportar un número creciente de OIVs y permitir actualizaciones sencillas del motor de reglas de cumplimiento.
+\end{itemize}
+
+\section{Arquitectura de Funcionamiento}
+La solución se implementará como una aplicación SaaS multi-tenant de tres capas:
+\begin{enumerate}
+    \item \textbf{Capa de Presentación (Frontend):} La interfaz de usuario web con la que interactúan los clientes.
+    \item \textbf{Capa Lógica (Backend):} La API construida en Django que contiene toda la lógica de negocio, incluyendo el motor de cumplimiento y la gestión de tenants.
+    \item \textbf{Capa de Datos:} Una base de datos PostgreSQL con un esquema dedicado por cada tenant para un aislamiento robusto, y un servicio de almacenamiento de objetos para la evidencia documental.
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=\columnwidth]{arquitectura.png}}
+\caption{Diagrama de la arquitectura SaaS multi-tenant propuesta.}
+\label{fig}
+\end{figure}
+
+
+\end{document}
