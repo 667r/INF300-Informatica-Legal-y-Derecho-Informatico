@@ -107,6 +107,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Añade 'corsheaders' si lo instalas, por ahora esto es suficiente
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
+CSRF_COOKIE_HTTPONLY = False
+
+# Configuración para los archivos de EVIDENCIA
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

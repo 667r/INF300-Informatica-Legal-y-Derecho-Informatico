@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary: #2563eb;
+    --secondary: #1e40af;
+    --accent: #3b82f6;
+    --danger: #dc2626;
+    --warning: #f59e0b;
+    --success: #10b981;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.progress-bar {
+    height: 1.5rem;
+    border-radius: 0.375rem;
+    background-color: #e5e7eb;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+
+.evidence-badge {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-not-evaluated {
+    background-color: #e5e7eb;
+    color: #4b5563;
+}
+
+.status-compliant {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-non-compliant {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.status-partial {
+    background-color: #fef3c7;
+    color: #92400e;
+}
