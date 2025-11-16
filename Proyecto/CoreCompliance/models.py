@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings # Para asociar al usuario
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User 
 
 # Para la Funcionalidad 3: Biblioteca de Recursos [cite: 41]
 class ComplianceDomain(models.Model):

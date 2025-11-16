@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function EvaluationCard({ rule, onAnswerChange }) {
     
@@ -45,6 +45,17 @@ function EvaluationCard({ rule, onAnswerChange }) {
         onAnswerChange(rule.id, { notes: e.target.value });
     };
 
+    const handleEvidenceRemove = (e) => {
+        e.preventDefault(); 
+        onAnswerChange(rule.id, { evidence: "" }); // <-- ESTA ES LA SOLUCIÓN
+    };
+
+    useEffect(() => {
+        if (window.feather) {
+            window.feather.replace();
+        }
+    }, [answer.evidence]);
+
     return (
         <div className="card" style={{ padding: '1.5rem', transition: 'all 0.2s' }}>
             <div className="rule-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
@@ -90,15 +101,31 @@ function EvaluationCard({ rule, onAnswerChange }) {
                 </div>
 
                 {/* Evidencia */}
+
                 <div className="control-group" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: '1 1 200px' }}>
                     <label className="control-label" style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: '500' }}>Evidencia</label>
                     <input type="file" id={`file-${rule.id}`} onChange={handleEvidenceUpload} style={{ display: 'none' }} />
                     <label htmlFor={`file-${rule.id}`} className="cursor-pointer bg-blue-100 text-blue-700 px-3 py-2 rounded-md text-sm font-medium text-center">
                         Adjuntar Archivo
                     </label>
-                    <span className="evidence-badge" style={{ display: answer.evidence ? 'inline-flex' : 'none' }}>
-                        {answer.evidence ? <a href={answer.evidence} target="_blank" rel="noopener noreferrer">Ver Evidencia</a> : ''}
-                    </span>
+
+                    {/* --- SECCIÓN MODIFICADA --- */}
+                    {/* Solo muestra esta sección si HAY evidencia */}
+                    {answer.evidence && (
+                        <div className="evidence-badge flex items-center justify-between" style={{ display: 'inline-flex' }}>
+                            <a href={answer.evidence} target="_blank" rel="noopener noreferrer" className="truncate">
+                                Ver Evidencia
+                            </a>
+                            <button 
+                                onClick={handleEvidenceRemove} 
+                                className="text-red-600 hover:text-red-800 ml-2"
+                                title="Eliminar evidencia"
+                            >
+                                <i data-feather="x-circle" style={{ width: '16px', height: '16px' }}></i>
+                            </button>
+                        </div>
+                    )}
+                    {/* --- FIN DE LA SECCIÓN --- */}
                 </div>
             </div>
         </div>

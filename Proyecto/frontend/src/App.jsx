@@ -45,7 +45,9 @@ function App() {
       formData.append('rule_id', ruleId); 
       
       for (const [key, value] of Object.entries(changes)) {
-        if (value) {
+        // CORRECCIÓN: Permitimos enviar 'null' (para borrar archivos)
+        // o valores vacíos (para borrar notas)
+        if (value !== undefined) { 
           formData.append(key, value);
         }
       }
