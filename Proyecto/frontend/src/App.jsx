@@ -4,6 +4,8 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import EvaluationCard from './components/EvaluationCard'; 
 import GoToTop from './components/gototop';
+import Footer from './components/Footer';
+import { exportToPDF } from './utils/pdfExport';
 
 
 function App() {
@@ -11,6 +13,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastAnswerTime, setLastAnswerTime] = useState(null);
+  const [stats, setStats] = useState(null);
 
   // logica de carga
   useEffect(() => {
@@ -25,7 +28,18 @@ function App() {
         setLoading(false);
       }
     };
+    
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get('/api/dashboard-stats/');
+        setStats(response.data);
+      } catch (err) {
+        console.error("Error cargando stats:", err);
+      }
+    };
+
     fetchEvaluation();
+    fetchStats();
   }, []);
 
   // logica de guardado
@@ -73,10 +87,33 @@ function App() {
           )
         }))
       );
-      setLastAnswerTime(new Date()); 
+      setLastAnswerTime(new Date());
+      
+      // Update stats after saving
+      try {
+        const statsResponse = await axios.get('/api/dashboard-stats/');
+        setStats(statsResponse.data);
+      } catch (err) {
+        console.error("Error actualizando stats:", err);
+      }
     } catch (err) {
       setError('Error al guardar. Inténtalo de nuevo.');
       console.error(err);
+    }
+  };
+
+  // Función para exportar a PDF
+  const handleExportPDF = async () => {
+    try {
+      // Fetch latest stats if needed
+      const statsResponse = await axios.get('/api/dashboard-stats/');
+      const currentStats = statsResponse.data;
+      
+      // Export PDF
+      exportToPDF(domains, currentStats);
+    } catch (err) {
+      console.error('Error al exportar PDF:', err);
+      setError('Error al exportar PDF. Inténtalo de nuevo.');
     }
   };
 
@@ -116,8 +153,51 @@ function App() {
               ))
             )}
           </div>
+
+          {/* Export PDF Button */}
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            marginTop: '3rem', 
+            marginBottom: '2rem' 
+          }}>
+            <button
+              onClick={handleExportPDF}
+              disabled={loading || !domains.length}
+              style={{
+                backgroundColor: '#1e40af',
+                color: 'white',
+                padding: '0.75rem 2rem',
+                fontSize: '1rem',
+                fontWeight: '600',
+                border: 'none',
+                borderRadius: '0.5rem',
+                cursor: loading || !domains.length ? 'not-allowed' : 'pointer',
+                opacity: loading || !domains.length ? 0.6 : 1,
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                if (!loading && domains.length) {
+                  e.target.style.backgroundColor = '#1e3a8a';
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.15)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!loading && domains.length) {
+                  e.target.style.backgroundColor = '#1e40af';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                }
+              }}
+            >
+              Exportar a PDF
+            </button>
+          </div>
         </div>
       </main>
+      <Footer />
       <GoToTop />
     </div>
   );

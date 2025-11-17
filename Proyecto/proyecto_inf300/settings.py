@@ -26,7 +26,16 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:8000',
+    'http://localhost:8000/',  # With trailing slash (what Django sees from proxy)
+]
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_USE_SESSIONS = False
 
 
 # Application definition
@@ -118,6 +127,8 @@ REST_FRAMEWORK = {
 }
 
 CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_DOMAIN = None  # Allow cookie for localhost
+CSRF_COOKIE_PATH = '/'
 
 # Configuración para los archivos de EVIDENCIA
 MEDIA_URL = '/media/'

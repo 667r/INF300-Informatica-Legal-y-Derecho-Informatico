@@ -39,15 +39,33 @@ function Dashboard({ lastAnswerTime }) {
     else barColor = '#10b981'; // --success
 
     return (
-        <div className="dashboard-card" style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', padding: '1.5rem', marginBottom: '2rem' }}>
-            <h2 className="dashboard-title" style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem' }}>Dashboard de Cumplimiento</h2>
-            <div className="progress-info" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                <span className="progress-percentage" style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e40af' }}>{percentage}%</span>
-                <span className="progress-count" style={{ color: '#6b7280' }}>
-                    {stats.compliant} de {stats.total} reglas cumplidas
-                </span>
+        <>
+            <div className="dashboard-card" style={{ 
+                backgroundColor: 'white', 
+                borderRadius: '0.5rem 0.5rem 0 0', 
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', 
+                padding: '1.5rem 1.5rem 0.5rem 1.5rem', 
+                marginBottom: '0'
+            }}>
+                <h2 className="dashboard-title" style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem' }}>Dashboard de Cumplimiento</h2>
+                <div className="progress-info" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span className="progress-percentage" style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e40af' }}>{percentage}%</span>
+                    <span className="progress-count" style={{ color: '#6b7280' }}>
+                        {stats.compliant} de {stats.total} reglas cumplidas
+                    </span>
+                </div>
             </div>
-            <div className="progress-container" style={{ marginTop: '1rem' }}>
+            <div className="progress-container" style={{ 
+                position: 'sticky',
+                top: '0',
+                zIndex: 100,
+                backgroundColor: 'white',
+                padding: '1rem 1.5rem 1.5rem 1.5rem',
+                marginBottom: '2rem',
+                marginTop: '0',
+                borderRadius: '0 0 0.5rem 0.5rem',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+            }}>
                 <div className="progress-bar"> {/* 'progress-bar' ya está en style.css */}
                     <div 
                         className="progress-fill" 
@@ -60,7 +78,7 @@ function Dashboard({ lastAnswerTime }) {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 
