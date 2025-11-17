@@ -1,0 +1,136 @@
+[
+{
+  "model": "CoreCompliance.compliancedomain",
+  "pk": 1,
+  "fields": {
+    "name": "Gobernanza y Gestión",
+    "description": ""
+  }
+},
+{
+  "model": "CoreCompliance.compliancedomain",
+  "pk": 5,
+  "fields": {
+    "name": "Continuidad Operacional y Resiliencia",
+    "description": ""
+  }
+},
+{
+  "model": "CoreCompliance.compliancedomain",
+  "pk": 6,
+  "fields": {
+    "name": "Reporte de Incidentes",
+    "description": ""
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 1,
+  "fields": {
+    "domain": 1,
+    "text": "¿Se ha designado formalmente un delegado de ciberseguridad que actúe como contraparte de la ANCI?",
+    "reference": "Art. 8º i",
+    "suggested_action": "Nombrar un Delegado de Ciberseguridad y comunicar la designación a la autoridad."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 5,
+  "fields": {
+    "domain": 1,
+    "text": "¿Se cuenta con programas de capacitación y educación continua en ciberhigiene para trabajadores y colaboradores?",
+    "reference": "Art. 8º h",
+    "suggested_action": "Desarrollar e implementar un plan anual de capacitación en ciberseguridad y ciberhigiene."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 6,
+  "fields": {
+    "domain": 1,
+    "text": "¿Se cuenta con programas de capacitación y educación continua en ciberhigiene para trabajadores y colaboradores?",
+    "reference": "Art. 8º a",
+    "suggested_action": "Implementar un SGSI basado en un estándar (ej. ISO 27001) para la gestión de riesgos."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 7,
+  "fields": {
+    "domain": 1,
+    "text": "¿Se mantiene un registro actualizado de las acciones ejecutadas que componen el SGSI?",
+    "reference": "Art. 8º b",
+    "suggested_action": "Establecer un sistema de bitácora o registro (software o manual) para todas las actividades del SGSI."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 8,
+  "fields": {
+    "domain": 5,
+    "text": "¿Se han elaborado e implementado planes de continuidad operacional y ciberseguridad?",
+    "reference": "Art. 8º c",
+    "suggested_action": "Desarrollar y formalizar los Planes de Continuidad de Negocio (BCP) y Recuperación ante Desastres (DRP)."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 9,
+  "fields": {
+    "domain": 5,
+    "text": "¿Los planes de continuidad y ciberseguridad han sido certificados y se someten a revisiones periódicas (mínimo 2 años)?",
+    "reference": "Art. 8º c",
+    "suggested_action": "Contratar una entidad certificadora acreditada por la ANCI para auditar y certificar los planes."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 10,
+  "fields": {
+    "domain": 5,
+    "text": "¿Se realizan continuamente operaciones de revisión, ejercicios y simulacros (ej. tabletop) para detectar vulnerabilidades?",
+    "reference": "Art. 8º d",
+    "suggested_action": "Calendarizar y ejecutar ejercicios de ciberseguridad (ej. ethical hacking, tabletop) al menos una vez al año."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 11,
+  "fields": {
+    "domain": 5,
+    "text": "¿Existen procedimientos técnicos y organizacionales para adoptar medidas oportunas que reduzcan el impacto y propagación de un incidente?",
+    "reference": "Art. 8º e",
+    "suggested_action": "Integrar playbooks de respuesta a incidentes (ej. para ransomware) en el plan de ciberseguridad."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 12,
+  "fields": {
+    "domain": 6,
+    "text": "¿Existe un procedimiento para enviar una alerta temprana al CSIRT Nacional dentro de 3 horas desde el conocimiento de un incidente significativo?",
+    "reference": "Art. 9º a",
+    "suggested_action": "Definir y comunicar un canal de escalamiento interno (24/7) para reportar al CSIRT Nacional en menos de 3 horas."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 13,
+  "fields": {
+    "domain": 6,
+    "text": "¿Existe un procedimiento para enviar la actualización de información (evaluación inicial, gravedad) al CSIRT Nacional en 24 horas (si el servicio esencial es afectado)?",
+    "reference": "Art. 9º b",
+    "suggested_action": "Establecer un equipo de respuesta a incidentes (IR) responsable de recopilar la información para el informe de actualización."
+  }
+},
+{
+  "model": "CoreCompliance.controlrule",
+  "pk": 14,
+  "fields": {
+    "domain": 6,
+    "text": "¿Existe un procedimiento para informar a los potenciales afectados sobre incidentes que comprometan gravemente su información (ej. datos personales)?",
+    "reference": "Art. 8º g",
+    "suggested_action": "Crear plantillas de comunicación de crisis y definir el criterio para notificar a usuarios y clientes afectados."
+  }
+}
+]
