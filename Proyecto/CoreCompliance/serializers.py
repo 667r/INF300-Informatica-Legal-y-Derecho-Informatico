@@ -1,6 +1,14 @@
 from rest_framework import serializers
-from .models import ComplianceDomain, ControlRule, Answer
+from .models import ComplianceDomain, ControlRule, Answer, AnswerFile
 from django.contrib.auth.models import User
+
+class AnswerFileSerializer(serializers.ModelSerializer):
+    """
+    Serializador para archivos de respuesta.
+    """
+    class Meta:
+        model = AnswerFile
+        fields = ['id', 'file', 'file_type', 'uploaded_at']
 
 class AnswerSerializer(serializers.ModelSerializer):
     """
@@ -9,10 +17,11 @@ class AnswerSerializer(serializers.ModelSerializer):
     # 'user' y 'rule' serán de solo lectura, se asignarán en la vista.
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     rule = serializers.PrimaryKeyRelatedField(read_only=True)
+    files = AnswerFileSerializer(many=True, read_only=True)
 
     class Meta:
         model = Answer
-        fields = ['id', 'rule', 'user', 'status', 'notes', 'evidence', 'last_updated']
+        fields = ['id', 'rule', 'user', 'status', 'notes', 'name', 'email', 'phone', 'evidence', 'files', 'last_updated']
 
 
 class ControlRuleSerializer(serializers.ModelSerializer):
@@ -25,7 +34,7 @@ class ControlRuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ControlRule
-        fields = ['id', 'text', 'reference', 'suggested_action', 'user_answer']
+        fields = ['id', 'text', 'reference', 'suggested_action', 'requires_name', 'requires_mail', 'requires_phone', 'required_files', 'user_answer']
 
     def get_user_answer(self, obj):
         """

@@ -62,7 +62,22 @@ function App() {
         // CORRECCIÓN: Permitimos enviar 'null' (para borrar archivos)
         // o valores vacíos (para borrar notas)
         if (value !== undefined) { 
-          formData.append(key, value);
+          // Si es un archivo, asegurarse de que se añade correctamente
+          if (value instanceof File) {
+            formData.append(key, value, value.name);
+          } else {
+            formData.append(key, value);
+          }
+        }
+      }
+
+      // Debug: mostrar qué se está enviando
+      console.log('Enviando cambios para regla', ruleId, ':', Object.keys(changes));
+      for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          console.log(key, ':', value.name, '(archivo)');
+        } else {
+          console.log(key, ':', value);
         }
       }
 
@@ -76,6 +91,7 @@ function App() {
         });
       }
 
+      console.log('Respuesta recibida:', response.data);
       const updatedAnswer = response.data;
       setDomains(prevDomains => 
         prevDomains.map(domain => ({
@@ -98,7 +114,10 @@ function App() {
       }
     } catch (err) {
       setError('Error al guardar. Inténtalo de nuevo.');
-      console.error(err);
+      console.error('Error completo:', err);
+      if (err.response) {
+        console.error('Respuesta del servidor:', err.response.data);
+      }
     }
   };
 

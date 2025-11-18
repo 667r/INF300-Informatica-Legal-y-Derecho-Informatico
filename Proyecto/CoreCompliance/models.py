@@ -16,6 +16,12 @@ class ControlRule(models.Model):
     text = models.TextField(verbose_name="Texto de la Regla/Control")
     reference = models.CharField(max_length=100, blank=True, verbose_name="Referencia (Ej: Art. 8c)") # <-- AÑADE ESTA LÍNEA
     suggested_action = models.TextField(blank=True, verbose_name="Acción Sugerida (Func 3)")
+    
+    # Campos dinámicos para verificación
+    requires_name = models.IntegerField(default=0, verbose_name="Requiere Nombre (0=No, 1=Sí)")
+    requires_mail = models.IntegerField(default=0, verbose_name="Requiere Email (0=No, 1=Sí)")
+    requires_phone = models.IntegerField(default=0, verbose_name="Requiere Teléfono (0=No, 1=Sí)")
+    required_files = models.JSONField(default=dict, blank=True, verbose_name="Archivos Requeridos (JSON)")
 
     def __str__(self):
         return f"{self.reference} - {self.text[:70]}..."
@@ -42,8 +48,16 @@ class Answer(models.Model):
         verbose_name="Estado"
     )
     notes = models.TextField(blank=True, verbose_name="Notas/Comentarios")
-    evidence = models.FileField(upload_to='evidence/', blank=True, null=True, verbose_name="Archivo de Evidencia")
-    last_updated = models.DateTimeField(auto_now=True, verbose_name="Última Actualización") # <-- AÑADE ESTA LÍNEA
+    
+    # Campos dinámicos para verificación
+    name = models.CharField(max_length=255, blank=True, verbose_name="Nombre")
+    email = models.EmailField(blank=True, verbose_name="Email")
+    phone = models.CharField(max_length=50, blank=True, verbose_name="Teléfono")
+    
+    # Mantener evidence para compatibilidad (deprecated, usar AnswerFile)
+    evidence = models.FileField(upload_to='evidence/', blank=True, null=True, verbose_name="Archivo de Evidencia (Legacy)")
+    
+    last_updated = models.DateTimeField(auto_now=True, verbose_name="Última Actualización")
 
     class Meta:
         verbose_name = "Respuesta"
@@ -52,3 +66,22 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.rule.id} - {self.get_status_display()}"
+
+
+class AnswerFile(models.Model):
+    """
+    Modelo para almacenar múltiples archivos asociados a una respuesta.
+    Cada archivo está vinculado a un tipo de archivo requerido (ej: "BCP", "DRP", "Registro SGSI")
+    """
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name="files", verbose_name="Respuesta")
+    file = models.FileField(upload_to='evidence/', verbose_name="Archivo")
+    file_type = models.CharField(max_length=100, verbose_name="Tipo de Archivo", help_text="Nombre del archivo requerido (ej: 'BCP', 'DRP', 'Registro SGSI')")
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Subida")
+
+    class Meta:
+        verbose_name = "Archivo de Respuesta"
+        verbose_name_plural = "Archivos de Respuesta"
+        unique_together = ('answer', 'file_type')  # Un archivo por tipo por respuesta
+
+    def __str__(self):
+        return f"{self.answer.rule.reference} - {self.file_type} - {self.file.name}"
