@@ -47,13 +47,13 @@ function Dashboard({ lastAnswerTime }) {
                 padding: '1.5rem 1.5rem 0.5rem 1.5rem', 
                 marginBottom: '0'
             }}>
-                <h2 className="dashboard-title" style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem' }}>Dashboard de Cumplimiento</h2>
-                <div className="progress-info" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <span className="progress-percentage" style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e40af' }}>{percentage}%</span>
-                    <span className="progress-count" style={{ color: '#6b7280' }}>
-                        {stats.compliant} de {stats.total} reglas cumplidas
-                    </span>
-                </div>
+            <h2 className="dashboard-title" style={{ fontSize: '1.25rem', fontWeight: '600', color: '#1f2937', marginBottom: '1rem' }}>Dashboard de Cumplimiento</h2>
+            <div className="progress-info" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span className="progress-percentage" style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e40af' }}>{percentage}%</span>
+                <span className="progress-count" style={{ color: '#6b7280' }}>
+                    {stats.compliant} de {stats.total} reglas cumplidas
+                </span>
+            </div>
             </div>
             <div className="progress-container" style={{ 
                 position: 'sticky',

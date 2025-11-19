@@ -42,6 +42,55 @@ function App() {
     fetchStats();
   }, []);
 
+  // Poll for email status updates when there are pending verifications
+  useEffect(() => {
+    const hasPendingEmails = domains.some(domain =>
+      domain.rules.some(rule =>
+        rule.user_answer?.email_status === 'pending'
+      )
+    );
+
+    if (!hasPendingEmails) return;
+
+    const interval = setInterval(async () => {
+      try {
+        let statusChanged = false;
+        
+        // Check status for all pending emails
+        for (const domain of domains) {
+          for (const rule of domain.rules) {
+            const answer = rule.user_answer;
+            if (answer && answer.email_status === 'pending' && answer.id) {
+              try {
+                // Call check-email-status endpoint
+                const response = await axios.post('/api/check-email-status/', {
+                  answer_id: answer.id
+                });
+                
+                // Si el estado cambió, marcar para refrescar
+                if (response.data && response.data.email_status !== 'pending') {
+                  statusChanged = true;
+                }
+              } catch (err) {
+                console.error("Error verificando estado de email:", err);
+              }
+            }
+          }
+        }
+        
+        // Refresh evaluation data si hubo cambios
+        if (statusChanged) {
+          const response = await axios.get('/api/evaluation/');
+          setDomains(response.data);
+        }
+      } catch (err) {
+        console.error("Error actualizando estado de emails:", err);
+      }
+    }, 10000); // Check every 10 seconds (reduced frequency)
+
+    return () => clearInterval(interval);
+  }, [domains]);
+
   // logica de guardado
   const handleAnswerChange = async (ruleId, changes) => {
     let currentAnswer = null;
@@ -112,6 +161,9 @@ function App() {
       } catch (err) {
         console.error("Error actualizando stats:", err);
       }
+      
+      // Return the response so handleFileUpload can use it
+      return response;
     } catch (err) {
       setError('Error al guardar. Inténtalo de nuevo.');
       console.error('Error completo:', err);
@@ -133,6 +185,58 @@ function App() {
     } catch (err) {
       console.error('Error al exportar PDF:', err);
       setError('Error al exportar PDF. Inténtalo de nuevo.');
+    }
+  };
+
+  // Función para verificar email
+  const handleVerifyEmail = async (answerId) => {
+    console.log('handleVerifyEmail llamado con answerId:', answerId);
+    try {
+      console.log('Enviando POST a /api/verify-email/ con answer_id:', answerId);
+      const response = await axios.post('/api/verify-email/', {
+        answer_id: answerId
+      });
+      
+      console.log('Respuesta del servidor:', response.data);
+      
+      // Refresh the evaluation data to get updated email_status
+      const evalResponse = await axios.get('/api/evaluation/');
+      setDomains(evalResponse.data);
+      
+      console.log('Email verification iniciada:', response.data);
+    } catch (err) {
+      console.error('Error al verificar email:', err);
+      if (err.response) {
+        console.error('Respuesta del servidor:', err.response.data);
+        console.error('Status code:', err.response.status);
+      }
+      setError('Error al verificar email. Inténtalo de nuevo.');
+    }
+  };
+
+  // Función para verificar archivo
+  const handleVerifyFile = async (answerId, fileType) => {
+    console.log('handleVerifyFile llamado con answerId:', answerId, 'fileType:', fileType);
+    try {
+      const response = await axios.post('/api/verify-file/', {
+        answer_id: answerId,
+        file_type: fileType
+      });
+      
+      console.log('Respuesta verificación archivo:', response.data);
+      
+      // Refresh the evaluation data to get updated file verification status
+      const evalResponse = await axios.get('/api/evaluation/');
+      setDomains(evalResponse.data);
+      
+      return response.data;
+    } catch (err) {
+      console.error('Error al verificar archivo:', err);
+      if (err.response) {
+        console.error('Respuesta del servidor:', err.response.data);
+      }
+      setError('Error al verificar archivo. Inténtalo de nuevo.');
+      throw err; // Re-throw para que el componente pueda manejar el error
     }
   };
 
@@ -164,7 +268,9 @@ function App() {
                       <EvaluationCard 
                         key={rule.id}
                         rule={rule} 
-                        onAnswerChange={handleAnswerChange} 
+                        onAnswerChange={handleAnswerChange}
+                        onVerifyEmail={handleVerifyEmail}
+                        onVerifyFile={handleVerifyFile}
                       />
                     ))}
                   </div>

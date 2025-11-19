@@ -3,3 +3,6 @@ Django==5.2.8
 djangorestframework==3.16.1
 psycopg2-binary==2.9.11
 sqlparse==0.5.3
+sendgrid==6.11.0
+pandas==2.2.0
+openpyxl==3.1.2

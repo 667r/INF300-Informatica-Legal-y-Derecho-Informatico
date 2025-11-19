@@ -156,3 +156,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# SendGrid Configuration
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', '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')
+SENDGRID_FROM_EMAIL = os.environ.get('SENDGRID_FROM_EMAIL', 'matias.elgueta@usm.cl')

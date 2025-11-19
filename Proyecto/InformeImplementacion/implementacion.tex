@@ -1,0 +1,82 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage[utf8]{inputenc} % Para soportar caracteres en español
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Plataforma SaaS para la Autoevaluación y Gestión de Cumplimiento de la Ley Marco de Ciberseguridad en Chile}
+
+\author{\IEEEauthorblockN{Mariano Varas Ramos}
+\IEEEauthorblockA{\textit{Departamento de Informática} \\
+\textit{Universidad Técnica Federico Santa María}\\
+Santiago, Chile \\
+mariano.varas@usm.cl}
+\and
+\IEEEauthorblockN{Matías Elgueta Chavarria}
+\IEEEauthorblockA{\textit{Departamento de Informática} \\
+\textit{Universidad Técnica Federico Santa María}\\
+Santiago, Chile \\
+matias.elgueta@usm.cl}
+}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+
+\end{IEEEkeywords}
+
+\section{Introducción}
+
+
+\section{Implementación}
+
+\section{Resultados}
+
+En esta etapa de implementación se desarrolló un prototipo funcional enfocado en un subconjunto acotado de obligaciones de la Ley Marco de Ciberseguridad en Chile (Ley 21.663), con el objetivo de validar la viabilidad técnica de la plataforma y explorar mecanismos de validación automática del cumplimiento.
+
+La funcionalidad principal del sistema corresponde al módulo de autoevaluación, donde el usuario puede registrar el estado de cumplimiento de obligaciones específicas y adjuntar evidencia. Para este prototipo se implementaron solo cuatro reglas, seleccionadas por su relevancia y por permitir validar técnicas distintas de verificación, todas ellas derivadas de la Ley Marco de Ciberseguridad:
+
+\begin{itemize}
+    \item \textbf{Regla 1 (Art. 8.i, Ley 21.663):} designación formal de un delegado de ciberseguridad que actúa como contraparte frente a la ANCI. En la implementación se valida el formato del correo electrónico del delegado y se integra un servicio externo de envío de correos para verificar que la dirección registrada sea capaz de recibir mensajes, diferenciando estados como “pendiente”, “válido” o “rebotado”.
+
+    \item \textbf{Regla 7 (Art. 8.b, Ley 21.663):} mantención de un registro actualizado de las acciones del SGSI. El sistema permite subir un archivo en formato hoja de cálculo; a partir de este, identifica automáticamente la fecha más reciente registrada y determina si el registro se considera actualizado según un criterio temporal definido en el proyecto.
+
+    \item \textbf{Regla 8 (Art. 8.c, Ley 21.663):} existencia de planes de continuidad operacional y ciberseguridad (BCP y DRP). La herramienta exige la carga de dos documentos diferenciados y verifica que ambos archivos existan y no estén vacíos, evitando declarar cumplimiento sin evidencia documental mínima.
+
+    \item \textbf{Regla 12 (Art. 9.a, Ley 21.663):} procedimiento para la emisión de una alerta temprana al CSIRT Nacional dentro de un plazo máximo de tres horas desde la detección de un incidente. En el prototipo se valida la existencia de un documento que describa el procedimiento y se registra un canal de contacto principal asociado a la notificación.
+\end{itemize}
+
+A continuación, se presenta una captura correspondiente a la validación automática del registro SGSI (Regla 7), donde se muestra el análisis del archivo Excel y la identificación de la fecha más reciente registrada:
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\columnwidth]{registros.png}}
+    \caption{Validación automática del registro SGSI mediante análisis del archivo Excel.}
+    \label{fig:sgsi}
+\end{figure}
+
+Sobre esta base, se implementó la funcionalidad secundaria de generación de reportes, que permite descargar un archivo PDF con el resumen del estado de las reglas evaluadas. El reporte incluye, para cada obligación implementada, su estado (``Cumple'', ``No cumple'', ``Cumple parcialmente'' o ``No evaluado'') y datos complementarios como la validez del correo del delegado, la confirmación de carga de documentos o la existencia de registros recientes del SGSI. El PDF se genera desde el frontend mediante un botón al final del formulario y constituye evidencia tangible del diagnóstico obtenido en la autoevaluación.
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[width=\columnwidth]{pdf.png}}
+    \caption{Ejemplo del reporte PDF generado por la plataforma.}
+    \label{fig:pdf}
+\end{figure}
+
+Finalmente, se desarrolló de manera parcial la funcionalidad terciaria orientada a sugerir acciones de mejora. Cuando el usuario marca una regla como ``No cumple'', el sistema despliega un mensaje con una acción sugerida asociada a esa obligación, por ejemplo: ``Acción sugerida: Establecer un sistema de bitácora o registro (software o manual) para todas las actividades del SGSI''. Esta funcionalidad se implementó únicamente como prueba de concepto en la interfaz, sin un motor generalizado de recomendaciones ni seguimiento de planes de acción, pero ilustra el potencial de la plataforma para evolucionar desde la simple evaluación hacia la gestión activa del cumplimiento.
+
+\section{Conclusiones}
+
+\end{document}

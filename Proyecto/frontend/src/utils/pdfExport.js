@@ -8,6 +8,37 @@ const getFileName = (evidenceUrl) => {
   return parts[parts.length - 1] || '';
 };
 
+// Helper function to get email status text
+const getEmailStatusText = (emailStatus) => {
+  const statusMap = {
+    'valid': 'Email verificado ✅',
+    'bounced': 'Email inválido / rebotado ❌',
+    'pending': 'Verificando email…'
+  };
+  return statusMap[emailStatus] || '';
+};
+
+// Helper function to get file verification status text
+const getFileVerificationStatusText = (fileStatus, fileMessage) => {
+  if (!fileStatus) return '';
+  
+  // Si hay un mensaje del backend, usarlo directamente (ya incluye toda la info)
+  if (fileMessage) {
+    return fileMessage;
+  }
+  
+  // Si no hay mensaje, usar el status básico
+  const statusMap = {
+    'up_to_date': 'Registros al día',
+    'outdated': 'Registros con >6 meses de antigüedad',
+    'very_outdated': 'Registros no están al día',
+    'error': 'Error en verificación',
+    'pending': 'Verificando archivo…'
+  };
+  
+  return statusMap[fileStatus] || fileStatus;
+};
+
 // Map status to Spanish
 const getStatusText = (status) => {
   const statusMap = {
@@ -131,7 +162,97 @@ export const exportToPDF = (domains, stats) => {
         yPosition += lineHeight * 0.3;
       }
 
-      // Evidence filename
+      // Campos dinámicos de texto (name, email, phone)
+      if (answer) {
+        // Email con estado de verificación
+        if (rule.requires_mail === 1 && answer.email) {
+          doc.setFont(undefined, 'normal');
+          doc.setFontSize(9);
+          const emailStatusText = getEmailStatusText(answer.email_status);
+          if (emailStatusText) {
+            const emailLine = `Email: ${answer.email} - ${emailStatusText}`;
+            const emailLines = doc.splitTextToSize(emailLine, maxWidth - 10);
+            emailLines.forEach(line => {
+              checkPageBreak();
+              doc.text(line, margin + 5, yPosition);
+              yPosition += lineHeight * 0.8;
+            });
+          } else {
+            doc.text(`Email: ${answer.email}`, margin + 5, yPosition);
+            yPosition += lineHeight * 0.8;
+          }
+          doc.setFontSize(10);
+        }
+        
+        // Nombre
+        if (rule.requires_name === 1 && answer.name) {
+          doc.setFont(undefined, 'normal');
+          doc.setFontSize(9);
+          doc.text(`Nombre: ${answer.name}`, margin + 5, yPosition);
+          yPosition += lineHeight * 0.8;
+          doc.setFontSize(10);
+        }
+        
+        // Teléfono
+        if (rule.requires_phone === 1 && answer.phone) {
+          doc.setFont(undefined, 'normal');
+          doc.setFontSize(9);
+          const phoneDigits = answer.phone.replace(/\D/g, '');
+          const phoneFormatted = phoneDigits.length === 9 ? `+56 ${phoneDigits}` : answer.phone;
+          doc.text(`Teléfono: ${phoneFormatted}`, margin + 5, yPosition);
+          yPosition += lineHeight * 0.8;
+          doc.setFontSize(10);
+        }
+      }
+
+      // Archivos dinámicos
+      const requiredFiles = rule.required_files || {};
+      const requiredFileTypes = Object.keys(requiredFiles);
+      
+      if (requiredFileTypes.length > 0 && answer && answer.files) {
+        requiredFileTypes.forEach(fileType => {
+          const verificationMonths = requiredFiles[fileType] || 0;
+          const file = answer.files.find(f => f.file_type === fileType);
+          
+          doc.setFont(undefined, 'normal');
+          doc.setFontSize(9);
+          
+          if (file) {
+            const fileName = getFileName(file.file);
+            let fileInfo = `${fileType}: ${fileName || 'Archivo subido'}`;
+            
+            // Si tiene verificación de fecha (número > 0)
+            if (verificationMonths > 0) {
+              const verificationStatus = getFileVerificationStatusText(
+                file.file_verification_status,
+                file.file_verification_message
+              );
+              if (verificationStatus) {
+                fileInfo += ` - ${verificationStatus}`;
+              }
+            } else {
+              // Sin verificación, solo indicar que está subido
+              fileInfo += ' - Subido correctamente ✓';
+            }
+            
+            const fileLines = doc.splitTextToSize(fileInfo, maxWidth - 10);
+            fileLines.forEach(line => {
+              checkPageBreak();
+              doc.text(line, margin + 5, yPosition);
+              yPosition += lineHeight * 0.8;
+            });
+          } else {
+            // Archivo no subido
+            doc.setTextColor(150, 150, 150); // Gray color
+            doc.text(`${fileType}: No subido`, margin + 5, yPosition);
+            doc.setTextColor(0, 0, 0); // Reset to black
+            yPosition += lineHeight * 0.8;
+          }
+        });
+        doc.setFontSize(10);
+      }
+
+      // Evidence filename (legacy)
       const evidenceFileName = answer && answer.evidence ? getFileName(answer.evidence) : '';
       if (evidenceFileName) {
         doc.setFont(undefined, 'italic');

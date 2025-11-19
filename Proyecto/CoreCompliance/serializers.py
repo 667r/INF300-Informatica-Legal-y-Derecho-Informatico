@@ -8,7 +8,7 @@ class AnswerFileSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = AnswerFile
-        fields = ['id', 'file', 'file_type', 'uploaded_at']
+        fields = ['id', 'file', 'file_type', 'uploaded_at', 'file_verification_status', 'file_verification_message']
 
 class AnswerSerializer(serializers.ModelSerializer):
     """
@@ -21,7 +21,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ['id', 'rule', 'user', 'status', 'notes', 'name', 'email', 'phone', 'evidence', 'files', 'last_updated']
+        fields = ['id', 'rule', 'user', 'status', 'notes', 'name', 'email', 'phone', 'email_status', 'evidence', 'files', 'last_updated']
 
 
 class ControlRuleSerializer(serializers.ModelSerializer):

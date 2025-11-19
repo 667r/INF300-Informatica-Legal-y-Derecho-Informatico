@@ -24,10 +24,10 @@ class AnswerFileInline(admin.TabularInline):
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ('rule', 'user', 'status', 'last_updated')
-    list_filter = ('status', 'user')
-    search_fields = ('rule__text',)
-    fields = ('rule', 'user', 'status', 'notes', 'name', 'email', 'phone', 'evidence', 'last_updated')
+    list_display = ('rule', 'user', 'status', 'email', 'email_status', 'last_updated')
+    list_filter = ('status', 'user', 'email_status')
+    search_fields = ('rule__text', 'email')
+    fields = ('rule', 'user', 'status', 'notes', 'name', 'email', 'email_status', 'phone', 'evidence', 'last_updated')
     readonly_fields = ('last_updated',)
     inlines = [AnswerFileInline]
 
